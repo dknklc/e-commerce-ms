@@ -1,0 +1,53 @@
+services:
+  postgres:
+    container_name: pgsql_ms
+    image: postgres
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dekan
+      POSTGRES_PASSWORD: s3cret
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - microservices-net:
+
+  mongodb:
+    container_name: mongodb_ms
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dekan
+      MONGO_INITDB_ROOT_PASSWORD: s3cret
+    volumes:
+      - mongo:/data
+
+  mongo-express:
+    container_name: mongo-express_ms
+    image: mongo-express
+    ports:
+      - 8081:8081
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: dekan
+      ME_CONFIG_MONGODB_ADMINPASSWORD: s3cret
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+  mail-dev:
+    container_name: maildev_ms
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgres:
+  mongo:
