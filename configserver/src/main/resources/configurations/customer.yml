@@ -1,0 +1,15 @@
+
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      username: dekan
+      password: s3cret
+      host: localhost
+      port: 27017
+      database: customer
+      authentication-database: admin
+
+
