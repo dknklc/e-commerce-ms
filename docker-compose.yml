@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
-      - microservices-net:
+      - microservices-net
 
   mongodb:
     container_name: mongodb_ms

@@ -1,5 +1,4 @@
-package com.dekankilic.customer.dto;
-
+package com.dekankilic.product.dto;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatus;
