@@ -38,7 +38,7 @@ public class ProductService {
             throw new ProductPurchaseException("One or more products does not exits");
         }
         List<ProductPurchaseRequest> storedRequest = request.stream().sorted(Comparator.comparing(ProductPurchaseRequest::productId)).toList();
-        var purchasedProducts = new ArrayList<ProductPurchaseResponse>();
+        List<ProductPurchaseResponse> purchasedProducts = new ArrayList<>();
 
         for (int i = 0 ; i < storedProducts.size() ; i++){
             Product product = storedProducts.get(i);
@@ -51,7 +51,6 @@ public class ProductService {
             product.setAvailableQuantity(newAvailableQuantity);
             productRepository.save(product);
             purchasedProducts.add(mapper.toProductPurchaseResponse(product, productRequest.quantity()));
-
         }
 
         return purchasedProducts;
