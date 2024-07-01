@@ -8,6 +8,7 @@ import com.dekankilic.order.mapper.OrderMapper;
 import com.dekankilic.order.model.Order;
 import com.dekankilic.order.repository.OrderRepository;
 import com.dekankilic.order.service.client.CustomerFeignClient;
+import com.dekankilic.order.service.client.PaymentFeignClient;
 import com.dekankilic.order.service.client.ProductClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class OrderService {
     private final OrderMapper mapper;
     private final OrderLineService orderLineService;
     private final KafkaOrderConfirmationProducer kafkaOrderConfirmationProducer;
+    private final PaymentFeignClient paymentFeignClient;
 
     public Integer createOrder(OrderRequest request) {
         // check the customer --> customer microservice (OpenFeign)
@@ -41,9 +43,9 @@ public class OrderService {
             orderLineService.saveOrderLine(new OrderLineRequest(null, order.getId(), purchaseRequest.productId(), purchaseRequest.quantity()));
         }
 
-        // TODO: start payment process
-
-
+        // start payment process
+        PaymentRequest paymentRequest = new PaymentRequest(request.amount(), request.paymentMethod(), order.getId(), order.getReference(), customerResponse);
+        paymentFeignClient.createPayment(paymentRequest);
 
         // send the order confirmation --> notification microservice (kafka)
         kafkaOrderConfirmationProducer.sendOrderConfirmationMessage(
