@@ -1,6 +1,6 @@
 package com.dekankilic.payment.config.kafka;
 
-import com.dekankilic.payment.dto.PaymentNotificationEvent;
+import com.dekankilic.payment.dto.PaymentConfirmation;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,16 +21,16 @@ public class KafkaProducerConfiguration {
     private String kafkaBrokers;
 
     @Bean
-    public KafkaTemplate<String, PaymentNotificationEvent> kafkaTemplate() {
+    public KafkaTemplate<String, PaymentConfirmation> kafkaTemplate() {
         return new KafkaTemplate<>(producerConfig());
     }
 
-    private ProducerFactory<String, PaymentNotificationEvent> producerConfig() {
+    private ProducerFactory<String, PaymentConfirmation> producerConfig() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBrokers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        config.put(JsonSerializer.TYPE_MAPPINGS, "paymentNotificationEvent:com.dekankilic.payment.dto.PaymentNotificationEvent"); // When we send paymentNotificationEvent to consumer, it will aware of this object can be accepted.
+        config.put(JsonSerializer.TYPE_MAPPINGS, "paymentConfirmation:com.dekankilic.payment.dto.PaymentConfirmation"); // When we send paymentNotificationEvent to consumer, it will aware of this object can be accepted.
         return new DefaultKafkaProducerFactory<>(config);
     }
 }

@@ -1,0 +1,52 @@
+
+server:
+  port: 8040
+
+spring:
+  application:
+    name: notification
+  data:
+    mongodb:
+      username: dekan
+      password: s3cret
+      host: localhost
+      port: 27017
+      database: customer
+      authentication-database: admin
+  config:
+    import: optional:configserver:http://localhost:8888
+
+
+kafka:
+  host: localhost:9092
+  topics:
+    order-confirmation:
+      topic: order.order-confirmation.0
+      consumerGroup: ${spring.application.name}-orderGroup
+      replicationFactor: 1
+      retentionInMs: 604800000
+      autoOffsetReset: earliest
+    payment-confirmation:
+      topic: payment.payment-confirmation.0
+      consumerGroup: ${spring.application.name}-paymentGroup
+      replicationFactor: 1
+      retentionInMs: 604800000
+      autoOffsetReset: earliest
+
+mail:
+  host: localhost
+  port: 1025
+  username: dekan
+  password: dekan
+  properties:
+    mail:
+      smtp:
+        trust: "*"
+      auth: true
+      startls:
+        enabled: true
+      connectiontimeout: 5000
+      timeout: 3000
+      writetimeout: 5000
+
+

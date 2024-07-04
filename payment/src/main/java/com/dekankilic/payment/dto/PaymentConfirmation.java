@@ -4,7 +4,7 @@ import com.dekankilic.payment.model.enums.PaymentMethod;
 
 import java.math.BigDecimal;
 
-public record PaymentNotificationEvent(
+public record PaymentConfirmation(
         String orderReference,
         BigDecimal amount,
         PaymentMethod paymentMethod,

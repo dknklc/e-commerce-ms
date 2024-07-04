@@ -1,7 +1,7 @@
 package com.dekankilic.payment.service;
 
 import com.dekankilic.payment.config.kafka.KafkaPaymentConfirmationProducer;
-import com.dekankilic.payment.dto.PaymentNotificationEvent;
+import com.dekankilic.payment.dto.PaymentConfirmation;
 import com.dekankilic.payment.dto.PaymentRequest;
 import com.dekankilic.payment.mapper.PaymentMapper;
 import com.dekankilic.payment.model.Payment;
@@ -20,7 +20,7 @@ public class PaymentService {
         Payment payment = paymentRepository.save(mapper.toPayment(paymentRequest));
 
         producer.sendPaymentConfirmationMessage(
-                new PaymentNotificationEvent(
+                new PaymentConfirmation(
                         paymentRequest.orderReference(),
                         paymentRequest.amount(),
                         paymentRequest.paymentMethod(),
