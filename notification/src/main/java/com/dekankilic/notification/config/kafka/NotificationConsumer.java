@@ -21,7 +21,7 @@ public class NotificationConsumer {
     private final NotificationRepository notificationRepository;
     private final EmailService emailService;
 
-    @KafkaListener(topics = "payment-topic")
+    @KafkaListener(topics = "payment.payment-confirmation.0", groupId = "notification-paymentGroup")
     public void consumePaymentConfirmationEvent(PaymentConfirmation paymentConfirmation) throws MessagingException {
         log.info(String.format("Consuming the message from payment-topic Topic:: %s", paymentConfirmation));
 
@@ -38,7 +38,7 @@ public class NotificationConsumer {
         emailService.sendPaymentConfirmationEmail(paymentConfirmation.customerEmail(), customerName, paymentConfirmation.amount(), paymentConfirmation.orderReference());
     }
 
-    @KafkaListener(topics = "order-topic")
+    @KafkaListener(topics = "order.order-confirmation.0", groupId = "notification-orderGroup")
     public void consumeOrderConfirmationEvent(OrderConfirmation orderConfirmation) throws MessagingException {
         log.info(String.format("Consuming the message from order-topic Topic:: %s", orderConfirmation));
         notificationRepository.save(Notification.builder()
