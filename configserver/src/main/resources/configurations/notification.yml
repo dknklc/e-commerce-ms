@@ -1,0 +1,27 @@
+server:
+  port: 8040
+
+spring:
+  data:
+    mongodb:
+      username: dekan
+      password: s3cret
+      host: localhost
+      port: 27017
+      database: customer
+      authentication-database: admin
+  mail:
+    host: localhost
+    port: 1025
+    username: dekan
+    password: dekan
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000

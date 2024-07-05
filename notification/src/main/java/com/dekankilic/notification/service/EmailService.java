@@ -30,10 +30,11 @@ public class EmailService {
     public void sendPaymentConfirmationEmail(String destinationEmail, String customerName, BigDecimal amount, String orderReference) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
+        messageHelper.setFrom("dekan.kilic@gmail.com");
+        messageHelper.setTo(destinationEmail);
+        messageHelper.setSubject(EmailTemplates.PAYMENT_CONFIRMATION.getSubject());
 
-        messageHelper.setFrom("contact@dekan.kilic@gmail.com");
         final String templateName = EmailTemplates.PAYMENT_CONFIRMATION.getTemplate();
-
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", customerName);
         variables.put("amount", amount);
@@ -41,12 +42,12 @@ public class EmailService {
 
         Context context = new Context();
         context.setVariables(variables);
-        messageHelper.setSubject(EmailTemplates.PAYMENT_CONFIRMATION.getSubject());
+
 
         try {
             String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
-            messageHelper.setTo(destinationEmail);
+
             mailSender.send(mimeMessage);
 
             log.info(String.format("INFO - Email successfully sent to %s with template %s", destinationEmail, templateName));
