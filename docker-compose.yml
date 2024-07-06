@@ -84,6 +84,13 @@ services:
     networks:
       - microservices-net
 
+  zipkin: # distributed tracing
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - microservices-net
 
 networks:
   microservices-net:
