@@ -28,6 +28,8 @@ public class EmailService {
 
     @Async
     public void sendPaymentConfirmationEmail(String destinationEmail, String customerName, BigDecimal amount, String orderReference) throws MessagingException {
+        log.info("Payment Mail is sending");
+
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
         messageHelper.setFrom("dekan.kilic@gmail.com");
@@ -43,7 +45,6 @@ public class EmailService {
         Context context = new Context();
         context.setVariables(variables);
 
-
         try {
             String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
@@ -58,10 +59,11 @@ public class EmailService {
 
     @Async
     public void sendOrderConfirmationEmail(String destinationEmail, String customerName, BigDecimal amount, String orderReference, List<Product> products) throws MessagingException {
+        log.info("Order Mail is sending");
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
 
-        messageHelper.setFrom("contact@dekan.kilic@gmail.com");
+        messageHelper.setFrom("dekan.kilic@gmail.com");
         final String templateName = EmailTemplates.ORDER_CONFIRMATION.getTemplate();
 
         Map<String, Object> variables = new HashMap<>();

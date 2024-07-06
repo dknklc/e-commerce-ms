@@ -27,7 +27,7 @@ public class KafkaConsumerConfiguration {
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBrokers);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(JsonDeserializer.TYPE_MAPPINGS, "paymentConfirmation:com.dekankilic.notification.dto.PaymentConfirmation, orderConfirmation:com.dekankilic.notification.dto.OrderConfirmation"); // When we send paymentNotificationEvent to consumer, it will aware of this object can be accepted.
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(config);
@@ -35,9 +35,8 @@ public class KafkaConsumerConfiguration {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory() { // receives all messages from all topics or a partition on a single thread
-        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setRecordMessageConverter(new StringJsonMessageConverter());
         return factory;
     }
 }
